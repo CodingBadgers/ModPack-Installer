@@ -1,0 +1,78 @@
+package com.mcbadgercraft.installer;
+
+import java.util.Arrays;
+
+import javax.swing.UIManager;
+
+import com.mcbadgercraft.installer.gui.StartupFrame;
+import com.mcbadgercraft.installer.launcher.ProfilesFile;
+import com.mcbadgercraft.installer.log.LogPanel;
+import com.mcbadgercraft.installer.packs.PacksFile;
+
+
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
+
+import lombok.Getter;
+
+import io.github.thefishlive.bootstrap.Bootstrapper;
+import io.github.thefishlive.bootstrap.Launcher;
+import io.github.thefishlive.installer.InstallerUtils;
+import io.github.thefishlive.installer.exception.InstallerException;
+import io.github.thefishlive.installer.log.InstallerLogger;
+
+public class Bootstrap implements Launcher {
+
+	@Getter private static final InstallerLogger log = InstallerLogger.getLog();
+	@Getter private static final LogPanel logPanel = new LogPanel();
+	@Getter private static StartupFrame startup = null;
+
+	private static OptionParser parser = null;
+	private static OptionSpec<?> debugOption = null;
+	private static OptionSpec<?> helpOption = null;
+	
+	static {
+		parser = new OptionParser();
+		debugOption = parser.acceptsAll(Arrays.asList("debug", "d"), "Sets the program to debug mode");
+		helpOption = parser.acceptsAll(Arrays.asList("help", "?"), "Shows the program help").forHelp();
+	}
+	
+	public static void main(String[] args) throws Exception {
+		Bootstrapper.launch(Bootstrap.class, args);
+	}
+	
+	@Override
+	public void launch(String[] args) throws Exception {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+			logPanel.setVisible(true);
+			log.info("Starting AdminPack Installer v2.0");
+			
+			OptionSet options = parser.parse(args);
+			
+			if (options.has(helpOption)) {
+				parser.printHelpOn(System.out);
+				return;
+			}
+			
+			InstallerUtils.setDebug(options.has(debugOption));
+			ProfilesFile.setup();
+			PacksFile.setup();
+
+			startup = new StartupFrame();
+			startup.setVisible(true);
+			
+		} catch (InstallerException ex) {
+			log.error("A error has occurred causing the installer to crash");
+			log.error("Exception: " + ex.getMessage());
+			log.error("Stacktrace: ", ex);
+		} catch (Throwable throwable) {
+			log.fatal("A unexpected error has occurred causing the installer to crash");
+			log.fatal("Exception: " + throwable.getMessage());
+			log.fatal("Stacktrace: ", throwable);
+		}
+	}
+	
+}

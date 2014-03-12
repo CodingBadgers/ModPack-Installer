@@ -1,0 +1,86 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.sf.proguard:proguard-gradle:4.10'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+repositories{
+    mavenCentral()
+	mavenLocal()
+	maven {
+        url "http://repository-codingbadgers.forge.cloudbees.com/snapshot/"
+	}
+}
+
+// define the properties file
+ext.configFile = file "build.properties"
+
+configFile.withReader {
+    // read config. it shall from now on be referenced as simply config or as project.config
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+
+group = 'com.mcbadgercraft'
+archivesBaseName = 'modpack-installer'
+version = config.version
+targetCompatibility = config.java_version
+sourceCompatibility = config.java_version
+
+dependencies{
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'net.sf.jopt-simple:jopt-simple:4.5'
+    compile 'io.github.thefishlive:bootstrap:1.0.1'
+	compile 'io.github.thefishlive:installer:1.0-SNAPSHOT'
+	
+    testCompile "junit:junit:4.11"
+}
+
+jar {
+    from(configurations.compile.collect { zipTree(it).matching { include '**/*.class' } })
+	
+    manifest { 
+		attributes 'Main-Class': config.mainclass
+		attributes 'Version': config.version
+	}
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task shrinkJar(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
+    ext {
+        outDir = file("${buildDir}/proguard")
+        obfuscatedJar = "${outDir}/${jar.baseName}-${jar.version}.jar"
+    }
+    outDir.mkdirs()
+    
+    injars jar.archivePath
+    outjars obfuscatedJar
+    libraryjars configurations.compile
+    configuration 'proguard.pro'
+}
+
+task shrinkOutput(type: Jar, dependsOn: shrinkJar) {
+    classifier = 'shrunk'
+    from zipTree(shrinkJar.obfuscatedJar)
+    manifest { 
+		attributes 'Main-Class': config.mainclass
+		attributes 'Version': config.version
+	}
+}
+
+artifacts {
+    archives sourcesJar
+    //archives shrinkOutput
+}
