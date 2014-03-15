@@ -2,6 +2,8 @@ package com.mcbadgercraft.installer.monitor;
 
 import io.github.thefishlive.installer.event.PhaseChangeEvent;
 import io.github.thefishlive.installer.event.TaskCompleteEvent;
+import io.github.thefishlive.installer.event.Event.Result;
+import io.github.thefishlive.installer.exception.InstallerException;
 
 import com.google.common.eventbus.Subscribe;
 import com.mcbadgercraft.installer.Bootstrap;
@@ -28,7 +30,12 @@ public class ProgressMonitor {
 	}
 	
 	@Subscribe
-	public void onTaskComplete(TaskCompleteEvent event) {
-		Bootstrap.getLogPanel().nextTask();
+	public void onTaskComplete(TaskCompleteEvent event) throws InstallerException {
+		if (event.getResult() == Result.FAIL) {
+			throw new InstallerException("Task " + event.getTask().getName() + " failed to execute correctly");
+		} else {
+			Bootstrap.getLogPanel().nextTask();
+		}
 	}
+	
 }
