@@ -1,6 +1,7 @@
 package com.mcbadgercraft.installer.gui;
 
 import io.github.thefishlive.installer.exception.InstallerException;
+import io.github.thefishlive.installer.log.InstallerLogger;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -136,11 +137,18 @@ public class StartupFrame extends JFrame {
 			ModPackInstaller installer = new ModPackInstaller(modpack.getData());
 			installer.getBus().register(new ProgressMonitor());
 			
-			installer.perform(); // TODO error handling
+			if (!installer.perform()) {
+				throw new InstallerException("Error executing install");
+			}
+			
 			Bootstrap.getLog().user("Installation complete");
 			System.exit(0);
 		} catch (InstallerException e) {
-			e.printStackTrace(); // TODO exception handling
+			InstallerLogger log = Bootstrap.getLog();
+			log.user("A unexpected error has occurred, check log for more details");
+			log.fatal("A error has occurred trying to install this modpack to your computer");
+			log.fatal("Message: " + e.getMessage());
+			log.fatal("Stacktrace: ", e);
 		}
 	}
 }
