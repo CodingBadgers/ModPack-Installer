@@ -58,29 +58,6 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
-task shrinkJar(type: proguard.gradle.ProGuardTask, dependsOn: jar) {
-    ext {
-        outDir = file("${buildDir}/proguard")
-        obfuscatedJar = "${outDir}/${jar.baseName}-${jar.version}.jar"
-    }
-    outDir.mkdirs()
-    
-    injars jar.archivePath
-    outjars obfuscatedJar
-    libraryjars configurations.compile
-    configuration 'proguard.pro'
-}
-
-task shrinkOutput(type: Jar, dependsOn: shrinkJar) {
-    classifier = 'shrunk'
-    from zipTree(shrinkJar.obfuscatedJar)
-    manifest { 
-		attributes 'Main-Class': config.mainclass
-		attributes 'Version': config.version
-	}
-}
-
 artifacts {
     archives sourcesJar
-    //archives shrinkOutput
 }
