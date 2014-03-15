@@ -63,7 +63,7 @@ public class Bootstrap implements Launcher {
 
 			startup = new StartupFrame();
 			startup.setVisible(true);
-			
+			log.info("Startup complete");
 		} catch (InstallerException ex) {
 			log.error("A error has occurred causing the installer to crash");
 			log.error("Exception: " + ex.getMessage());

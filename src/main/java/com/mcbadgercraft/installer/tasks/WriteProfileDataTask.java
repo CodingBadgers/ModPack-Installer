@@ -1,5 +1,7 @@
 package com.mcbadgercraft.installer.tasks;
 
+import java.io.File;
+
 import com.mcbadgercraft.installer.Bootstrap;
 import com.mcbadgercraft.installer.ModPackInstaller;
 import com.mcbadgercraft.installer.config.InstallData;
@@ -13,8 +15,12 @@ import io.github.thefishlive.installer.task.Task;
 
 public class WriteProfileDataTask extends Task {
 
-	public WriteProfileDataTask() {
+	private File gamedir;
+
+	public WriteProfileDataTask(File gamedir) {
 		super("writeProfileData");
+		
+		this.gamedir = gamedir;
 	}
 
 	@Override
@@ -30,6 +36,9 @@ public class WriteProfileDataTask extends Task {
 			AuthProfile auth = (AuthProfile) Bootstrap.getStartup().getCbxProfile().getSelectedItem();
 			GameProfile game = new GameProfile(installdata.getProfileName());
 			game.setLastVersionId(installdata.getTarget());
+			game.setLauncherVisibilityOnGameClose("keep the launcher open");
+			game.setGameDir(gamedir);
+			game.setJavaArgs("-Xmx1G -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true");
 			
 			if (auth != null) {
 				game.setPlayerUUID(auth.getUuid());

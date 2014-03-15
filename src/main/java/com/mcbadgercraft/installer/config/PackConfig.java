@@ -2,15 +2,17 @@ package com.mcbadgercraft.installer.config;
 
 import io.github.thefishlive.installer.exception.InstallerException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mcbadgercraft.installer.config.json.ArtifactIdAdapter;
+import com.mcbadgercraft.installer.config.json.*;
 
 import lombok.Cleanup;
 import lombok.Getter;
@@ -23,6 +25,8 @@ public class PackConfig {
 	@Getter private static final Gson gson = new GsonBuilder()
 													.setPrettyPrinting()
 													.registerTypeAdapter(ArtifactId.class, new ArtifactIdAdapter())
+													.registerTypeAdapter(UUID.class, new UUIDAdapter())
+													.registerTypeAdapter(File.class, new FileAdapter())
 													.create();
 	
 	@Getter private int version;

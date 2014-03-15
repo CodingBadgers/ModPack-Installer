@@ -1,6 +1,7 @@
 package com.mcbadgercraft.installer.launcher;
 
 import java.util.List;
+import java.util.UUID;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -11,7 +12,7 @@ public class AuthProfile {
 	@Getter private String username;
 	@Getter private String accessToken;
 	@Getter private String userid;
-	@Getter private String uuid;
+	@Getter private UUID uuid;
 	@Getter private String displayName;
 	
 	@ToString

@@ -12,6 +12,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.JsonIOException;
 import com.mcbadgercraft.installer.ModPackInstaller;
 import com.mcbadgercraft.installer.config.PackConfig;
+import com.mcbadgercraft.installer.config.json.UUIDAdapter;
 
 import lombok.Cleanup;
 import lombok.Getter;
@@ -46,7 +47,7 @@ public class ProfilesFile {
 	}
 
 	public void addProfile(AuthProfile profile) throws JsonIOException, IOException {
-		authenticationDatabase.put(profile.getUuid(), profile);
+		authenticationDatabase.put(UUIDAdapter.format(profile.getUuid()), profile);
 		write();
 	}
 
