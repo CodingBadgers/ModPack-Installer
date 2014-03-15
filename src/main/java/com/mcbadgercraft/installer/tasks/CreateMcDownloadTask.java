@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import com.google.common.io.Files;
 import com.mcbadgercraft.installer.ModPackInstaller;
 
 import io.github.thefishlive.installer.Installer;
@@ -28,13 +29,18 @@ public class CreateMcDownloadTask extends Task {
 		}
 		
 		ModPackInstaller modpack = (ModPackInstaller) installer;
-		
+
 		try {
 			String version = modpack.getConfig().getInstall().getVersion().getMinecraft();
+			File versionJar = new File(launcherdir, String.format("versions%1$s%2$s%1$s%2$s.jar", File.separator, version));
+			File dest = new File(launcherdir, String.format("versions%1$s%2$s%1$s%2$s.jar", File.separator, modpack.getConfig().getInstall().getTarget()));
 			
+			if (versionJar.exists()) {
+				Files.copy(versionJar, dest);
+				return true;
+			}
+		
 			URL url = new URL(String.format("http://s3.amazonaws.com/Minecraft.Download/versions/%1$s/%1$s.jar", version));
-			File dest = new File(launcherdir, String.format("versions%1$s%2$s%1$s%2$s.jar", File.separator, version));
-			
 			installer.addDownload(new SimpleDownload(url, dest));
 		} catch (IOException e) {
 			throw new InstallerException(e);

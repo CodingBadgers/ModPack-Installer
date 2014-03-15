@@ -36,7 +36,7 @@ public class ModPackInstaller extends Installer {
 		addTask(PRE_DOWNLOAD, new CopySettingsTask(launcherDir, gamedir).addDependency("createDir"));
 		addTask(PRE_DOWNLOAD, new CreateResourceDownloads(gamedir).addDependency("createDir"));
 		addTask(PRE_DOWNLOAD, new CreateLibraryDownloadsTask(launcherDir));
-		addTask(PRE_DOWNLOAD, new WriteProfileDataTask());
+		addTask(PRE_DOWNLOAD, new WriteProfileDataTask(gamedir));
 		
 		addTask(POST_DOWNLOAD, new UnpackDownloadsTask());
 	}
