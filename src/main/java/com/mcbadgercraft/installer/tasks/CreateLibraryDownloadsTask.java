@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import com.mcbadgercraft.installer.ModPackInstaller;
+import com.mcbadgercraft.installer.Utils;
 import com.mcbadgercraft.installer.config.VersionData.LibraryInfo;
 
 import io.github.thefishlive.installer.Installer;
@@ -39,12 +40,11 @@ public class CreateLibraryDownloadsTask extends Task {
 						baseurl = "https://libraries.minecraft.net/";
 					}
 					
-					String path = createPath(lib);
-					
+					String path = Utils.createPath(lib.getName(), LIBRARY_EXTENSION);
 					baseurl += path;
 					
-					File dest = new File(launcherdir, path);
-					URL url = new URL(baseurl);
+					File dest = new File(launcherdir, "libraries" + File.separator + path);
+					URL url = new URL(baseurl.replace(File.separatorChar, '/'));
 					
 					if (!dest.getParentFile().exists()) {
 						dest.getParentFile().mkdirs();
@@ -60,12 +60,5 @@ public class CreateLibraryDownloadsTask extends Task {
 		return true;
 	}
 	
-	private String createPath(LibraryInfo info) {
-		StringBuilder dest = new StringBuilder();
-		dest.append(info.getName().getGroup().replace('.', '/')).append('/');
-		dest.append(info.getName().getName()).append("/").append(info.getName().getVersion()).append("/");
-		dest.append(String.format("%1$s-%2$s.%3$s", info.getName().getName(), info.getName().getVersion(), LIBRARY_EXTENSION));
-		return dest.toString();
-	}
 
 }

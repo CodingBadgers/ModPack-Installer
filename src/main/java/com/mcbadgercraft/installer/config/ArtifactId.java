@@ -4,9 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lombok.Getter;
-import lombok.ToString;
 
-@ToString
 public class ArtifactId {
 
 	private static final Pattern ARTIFACT_PATTERN = Pattern.compile("([\\w\\.-]+):([\\w\\.-]+):([\\w\\.-]+)");
@@ -25,5 +23,9 @@ public class ArtifactId {
 		group = matcher.group(1);
 		name = matcher.group(2);
 		version = matcher.group(3);
+	}
+	
+	public String toString() {
+		return String.format("%1$s:%2$s:%3$s", group, name, version);
 	}
 }

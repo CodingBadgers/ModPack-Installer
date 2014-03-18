@@ -4,7 +4,9 @@ import io.github.thefishlive.installer.InstallerUtils;
 
 import java.io.File;
 
+import com.mcbadgercraft.installer.Utils;
 import com.mcbadgercraft.installer.config.ResourceInfo;
+import com.mcbadgercraft.installer.resource.FileType;
 
 public class LibraryInstallMethod implements InstallMethod {
 
@@ -12,14 +14,7 @@ public class LibraryInstallMethod implements InstallMethod {
 	
 	@Override
 	public File createPath(File gamedir, ResourceInfo info) {
-		File dest = new File(launcherdir, "libraries");
-		String[] split = info.getArtifactId().getGroup().split(".");
-		for (String part : split) {
-			dest = new File(dest, part);
-		}
-		dest = new File(new File(dest, info.getArtifactId().getName()), info.getArtifactId().getVersion());
-		dest.mkdirs();
-		return new File(dest, String.format("%1$s-%2$s.%3$s", info.getArtifactId().getName(), info.getArtifactId().getVersion(), info.getFiletype().getExtension()));
+		return new File(launcherdir, "libraries" + File.separator + Utils.createPath(info.getArtifactId(), FileType.JAR.getExtension()));
 	}
 
 }

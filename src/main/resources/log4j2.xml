@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="debug" name="ModPack-Installer"
+<Configuration status="warn" name="ModPack-Installer"
 	packages="com.mcbadgercraft.installer,io.github.thefishlive.installer">
 	
 	<Properties>
@@ -27,7 +27,7 @@
 			<PatternLayout pattern="[%-5p] %m%n" />
 		</Panel>
 		
-		<RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
+		<RollingRandomAccessFile name="File" fileName="modpackinstaller/logs/latest.log" filePattern="modpackinstaller/logs/%d{yyyy-MM-dd}-%i.log.gz">
 			<PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
 			<Policies>
 				<TimeBasedTriggeringPolicy />
@@ -43,18 +43,18 @@
 		
 		<Logger name="installer" level="info">
 			<AppenderRef ref="Console" />
-			<AppenderRef ref="Log" />
+			<AppenderRef ref="Log" level="info"/>
 		</Logger>
 		
 		<Logger name="installer.user" level="info">
-			<AppenderRef ref="Message" />
+			<AppenderRef ref="Message"/>
 		</Logger>
 		
 		<Logger name="installer.debug" level="debug" />
 		
 		<Logger name="error" level="error">
 			<AppenderRef ref="Error" />
-			<AppenderRef ref="LogError" />
+			<AppenderRef ref="LogError" level="info"/>
 		</Logger>
 	</Loggers>
 </Configuration>

@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
+import com.mcbadgercraft.installer.Bootstrap;
 import com.mcbadgercraft.installer.ModPackInstaller;
 import com.mcbadgercraft.installer.config.ResourceInfo;
 
@@ -32,6 +33,7 @@ public class CreateResourceDownloads extends Task {
 		List<ResourceInfo> resources = modpack.getConfig().getResources();
 		
 		for (ResourceInfo info : resources) {
+			Bootstrap.getLog().trace("Creating download for " + info.getArtifactId());
 			try {
 				URL url = info.getUrl();
 				File dest = info.getInstallMethod().createFilePath(gamedir, info);
