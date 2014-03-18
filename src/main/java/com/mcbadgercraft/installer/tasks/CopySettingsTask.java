@@ -36,8 +36,12 @@ public class CopySettingsTask extends Task {
 		for (CopyInfo copy : files) {
 			try {
 				File old = new File(launcherdir, copy.getOld());
-				File dest = new File(gamedir, copy.getRename() != null && !copy.getRename().equals("false") ? copy.getRename() : copy.getOld());
-				Files.copy(old, dest);
+				
+				if (old.exists()) {
+					File dest = new File(gamedir, copy.getRename() != null && !copy.getRename().equals("false") ? copy.getRename() : copy.getOld());
+					Files.copy(old, dest);
+				}
+				
 			} catch (IOException ex) {
 				throw new InstallerException(ex);
 			}
