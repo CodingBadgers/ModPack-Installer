@@ -25,7 +25,6 @@ public class GameProfile {
 	@Getter @Setter private File gameDir;
 	@Getter @Setter private File javaDir;
 	
-	
 	@Override
 	public String toString() {
 		return name;

@@ -64,7 +64,7 @@ public class StartupFrame extends JFrame {
 						startInstallation();
 					}
 					
-				}, "installerThread");
+				}, "installer");
 				setVisible(false);
 				thread.start();
 			}
