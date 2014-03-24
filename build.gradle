@@ -22,7 +22,7 @@ repositories{
 
 group = 'com.mcbadgercraft'
 archivesBaseName = 'modpack-installer'
-version = "2.1.1"
+version = "2.2-SNAPSHOT"
 
 targetCompatibility = JavaVersion.VERSION_1_7
 sourceCompatibility = JavaVersion.VERSION_1_7
