@@ -28,6 +28,8 @@ public class Bootstrap implements Launcher {
 	@Getter private static final LogPanel logPanel = new LogPanel();
 	@Getter private static StartupFrame startup = null;
 
+	@Getter private static final String version;
+	
 	private static OptionParser parser = null;
 	private static OptionSpec<?> debugOption = null;
 	private static OptionSpec<?> helpOption = null;
@@ -36,6 +38,14 @@ public class Bootstrap implements Launcher {
 		parser = new OptionParser();
 		debugOption = parser.acceptsAll(Arrays.asList("debug", "d"), "Sets the program to debug mode");
 		helpOption = parser.acceptsAll(Arrays.asList("help", "?"), "Shows the program help").forHelp();
+		
+		String pckgVersion = Bootstrap.class.getPackage().getImplementationVersion();
+		
+		if (pckgVersion == null) {
+			pckgVersion = "[dev-SNAPSHOT]";
+		}
+		
+		version = pckgVersion;
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -48,7 +58,9 @@ public class Bootstrap implements Launcher {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 			logPanel.setVisible(true);
-			log.info("Starting AdminPack Installer v2.0");
+			log.info("Starting AdminPack Installer v{}", version);
+			log.info("OS: {} ({}) [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
+			log.info("Java Version: {} ({})", System.getProperty("java.version"), System.getProperty("java.class.version"));
 			
 			OptionSet options = parser.parse(args);
 			

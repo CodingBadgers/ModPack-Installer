@@ -4,6 +4,7 @@
 	
 	<Properties>
 		<Property name="console.pattern">[%d{HH:mm:ss}] [%t/%p]: %m%n</Property>
+		
 	</Properties>
 	
 	<Appenders>

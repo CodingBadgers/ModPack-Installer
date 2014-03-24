@@ -10,6 +10,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
+apply plugin: 'application'
 
 repositories{
     mavenCentral()
@@ -19,21 +20,14 @@ repositories{
 	}
 }
 
-// define the properties file
-ext.configFile = file "build.properties"
-
-configFile.withReader {
-    // read config. it shall from now on be referenced as simply config or as project.config
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
-}
-
 group = 'com.mcbadgercraft'
 archivesBaseName = 'modpack-installer'
-version = config.version
-targetCompatibility = config.java_version
-sourceCompatibility = config.java_version
+version = "2.1.1-SNAPSHOT"
+
+targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_7
+
+mainClassName = "com.mcbadgercraft.installer.Bootstrap"
 
 dependencies{
     compile 'com.google.code.gson:gson:2.2.4'
@@ -44,12 +38,19 @@ dependencies{
     testCompile "junit:junit:4.11"
 }
 
-jar {
-    from(configurations.compile.collect { zipTree(it).matching { include '**/*.class' } })
+jar {	
+	name = archivesBaseName
 	
     manifest { 
-		attributes 'Main-Class': config.mainclass
-		attributes 'Version': config.version
+		attributes 'Version': version
+		
+		attributes 'Implementation-Version': version
+		attributes 'Implementation-Title': archivesBaseName
+		attributes 'Implementation-Vendor': group
+		
+		attributes 'Specification-Version': "1.1"
+		attributes 'Specification-Title': "Installer"
+		attributes 'Specification-Vendor': "io.github.thefishlive"
 	}
 }
 
