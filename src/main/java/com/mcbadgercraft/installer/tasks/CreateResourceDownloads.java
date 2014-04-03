@@ -1,14 +1,17 @@
 package com.mcbadgercraft.installer.tasks;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
 import com.mcbadgercraft.installer.Bootstrap;
 import com.mcbadgercraft.installer.ModPackInstaller;
 import com.mcbadgercraft.installer.config.ResourceInfo;
+import com.mcbadgercraft.installer.download.CompressedDownload;
 
 import io.github.thefishlive.installer.Installer;
+import io.github.thefishlive.installer.download.Download;
 import io.github.thefishlive.installer.download.SimpleDownload;
 import io.github.thefishlive.installer.exception.InstallerException;
 import io.github.thefishlive.installer.task.Task;
@@ -23,6 +26,7 @@ public class CreateResourceDownloads extends Task {
 		this.gamedir = gamedir;
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public boolean perform(Installer installer) throws InstallerException {
 		if (!(installer instanceof ModPackInstaller)) {
@@ -42,8 +46,15 @@ public class CreateResourceDownloads extends Task {
 					dest.getParentFile().mkdirs();
 				}
 				
-				installer.addDownload(new SimpleDownload(url, dest));
-			} catch (ReflectiveOperationException e) {
+				Download download = new SimpleDownload(url, dest);
+				
+				// If the file has been uploaded as a compressed file, download it as such
+				if (info.isCompressed()) {
+					download = new CompressedDownload(url, dest);
+				}
+				
+				installer.addDownload(download);
+			} catch (IOException | ReflectiveOperationException e) {
 				throw new InstallerException(e);
 			}
 		}

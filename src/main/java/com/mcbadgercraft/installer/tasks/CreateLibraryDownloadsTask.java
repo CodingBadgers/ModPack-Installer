@@ -5,17 +5,17 @@ import java.io.IOException;
 import java.net.URL;
 
 import com.mcbadgercraft.installer.ModPackInstaller;
-import com.mcbadgercraft.installer.Utils;
 import com.mcbadgercraft.installer.config.VersionData.LibraryInfo;
+import com.mcbadgercraft.installer.download.CompressedDownload;
+import com.mcbadgercraft.installer.resource.FileType;
+import com.mcbadgercraft.installer.utils.Utils;
 
 import io.github.thefishlive.installer.Installer;
-import io.github.thefishlive.installer.download.SimpleDownload;
 import io.github.thefishlive.installer.exception.InstallerException;
 import io.github.thefishlive.installer.task.Task;
 
 public class CreateLibraryDownloadsTask extends Task {
 
-	private static final String LIBRARY_EXTENSION = "jar.pack.xz";
 	private File launcherdir;
 
 	public CreateLibraryDownloadsTask(File launcherdir) {
@@ -40,7 +40,7 @@ public class CreateLibraryDownloadsTask extends Task {
 						baseurl = "https://libraries.minecraft.net/";
 					}
 					
-					String path = Utils.createPath(lib.getName(), LIBRARY_EXTENSION);
+					String path = Utils.createPath(lib.getName(), FileType.JAR);
 					baseurl += path;
 					
 					File dest = new File(launcherdir, "libraries" + File.separator + path);
@@ -50,7 +50,7 @@ public class CreateLibraryDownloadsTask extends Task {
 						dest.getParentFile().mkdirs();
 					}
 					
-					installer.addDownload(new SimpleDownload(url, dest));
+					installer.addDownload(new CompressedDownload(url, dest));
 				}
 			} catch (IOException ex) {
 				throw new InstallerException(ex);
@@ -59,6 +59,4 @@ public class CreateLibraryDownloadsTask extends Task {
 		
 		return true;
 	}
-	
-
 }

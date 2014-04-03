@@ -1,4 +1,4 @@
-package com.mcbadgercraft.installer.launcher;
+package com.mcbadgercraft.installer.mojang;
 
 import java.io.File;
 import java.util.List;

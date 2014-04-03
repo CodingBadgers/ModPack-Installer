@@ -13,9 +13,11 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Pack200;
 
+import org.tukaani.xz.XZFormatException;
 import org.tukaani.xz.XZInputStream;
 
 import com.google.common.io.Files;
+import com.mcbadgercraft.installer.Bootstrap;
 
 import io.github.thefishlive.installer.InstallPhase;
 import io.github.thefishlive.installer.Installer;
@@ -43,8 +45,14 @@ public class UnpackDownloadsTask extends Task {
 			
 			if (cur.getName().endsWith(PACK_EXTENTION)) {
 				try {
+					Bootstrap.getLog().debug("Decompressing {}.", cur.getName());
 					decompress(cur);
+				} catch (XZFormatException ex) {
+					// This wasn't meant to be, rename back to a jar file
+					Bootstrap.getLog().warn(cur.getName() + " is not a valid XZ compressed file.");
+					cur.renameTo(new File(cur.getParentFile(), cur.getName().substring(0, cur.getName().length() - PACK_EXTENTION.length())));
 				} catch (IOException ex) {
+					Bootstrap.getLog().warn(cur.getName() + " could not be decompressed correctly.");
 					throw new InstallerException(ex);
 				}
 			}

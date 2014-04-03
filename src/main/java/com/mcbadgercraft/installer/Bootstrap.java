@@ -5,8 +5,8 @@ import java.util.Arrays;
 import javax.swing.UIManager;
 
 import com.mcbadgercraft.installer.gui.StartupFrame;
-import com.mcbadgercraft.installer.launcher.ProfilesFile;
 import com.mcbadgercraft.installer.log.LogPanel;
+import com.mcbadgercraft.installer.mojang.ProfilesFile;
 import com.mcbadgercraft.installer.packs.PacksFile;
 
 

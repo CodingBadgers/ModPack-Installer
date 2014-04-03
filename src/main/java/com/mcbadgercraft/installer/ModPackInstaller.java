@@ -9,14 +9,7 @@ import java.io.File;
 import java.net.URL;
 
 import com.mcbadgercraft.installer.config.PackConfig;
-import com.mcbadgercraft.installer.tasks.CopySettingsTask;
-import com.mcbadgercraft.installer.tasks.CreateDirTask;
-import com.mcbadgercraft.installer.tasks.CreateLibraryDownloadsTask;
-import com.mcbadgercraft.installer.tasks.CreateMcDownloadTask;
-import com.mcbadgercraft.installer.tasks.CreateResourceDownloads;
-import com.mcbadgercraft.installer.tasks.UnpackDownloadsTask;
-import com.mcbadgercraft.installer.tasks.WriteProfileDataTask;
-import com.mcbadgercraft.installer.tasks.WriteVersionDataTask;
+import com.mcbadgercraft.installer.tasks.*;
 
 import lombok.Getter;
 
@@ -39,6 +32,6 @@ public class ModPackInstaller extends Installer {
 		addTask(PRE_DOWNLOAD, new WriteProfileDataTask(gamedir));
 		
 		addTask(POST_DOWNLOAD, new UnpackDownloadsTask());
+		addTask(POST_DOWNLOAD, new ValidateDownloadsTask().addDependency("unpackDownloads"));
 	}
-
 }

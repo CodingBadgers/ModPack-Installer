@@ -44,6 +44,7 @@ public class LogPanel extends JFrame {
 		scrollPane = new JScrollPane(noWrapPanel);
 		scrollPane.setBounds(10, 11, 564, 313);
 		getContentPane().add(scrollPane);
+		
 	}
 	
 	public void addLogLine(String line) {

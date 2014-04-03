@@ -9,7 +9,9 @@ public enum FileType {
 
 	JAR("jar"),
 	LITEMOD("litemod"),
-	ZIP("zip");
+	ZIP("zip"),
+	PACK_XZ("pack.xz"),
+	;
 
 	@Getter private String extension;
 	

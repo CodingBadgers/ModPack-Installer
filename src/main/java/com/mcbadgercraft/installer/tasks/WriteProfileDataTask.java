@@ -5,9 +5,9 @@ import java.io.File;
 import com.mcbadgercraft.installer.Bootstrap;
 import com.mcbadgercraft.installer.ModPackInstaller;
 import com.mcbadgercraft.installer.config.InstallData;
-import com.mcbadgercraft.installer.launcher.AuthProfile;
-import com.mcbadgercraft.installer.launcher.GameProfile;
-import com.mcbadgercraft.installer.launcher.ProfilesFile;
+import com.mcbadgercraft.installer.mojang.AuthProfile;
+import com.mcbadgercraft.installer.mojang.GameProfile;
+import com.mcbadgercraft.installer.mojang.ProfilesFile;
 
 import io.github.thefishlive.installer.Installer;
 import io.github.thefishlive.installer.exception.InstallerException;
@@ -35,10 +35,12 @@ public class WriteProfileDataTask extends Task {
 		try {
 			AuthProfile auth = (AuthProfile) Bootstrap.getStartup().getCbxProfile().getSelectedItem();
 			GameProfile game = new GameProfile(installdata.getProfileName());
-			game.setLastVersionId(installdata.getTarget());
-			game.setLauncherVisibilityOnGameClose("keep the launcher open");
-			game.setGameDir(gamedir);
-			game.setJavaArgs("-Xmx1G -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true");
+			{
+				game.setLastVersionId(installdata.getTarget());
+				game.setLauncherVisibilityOnGameClose("keep the launcher open");
+				game.setGameDir(gamedir);
+				game.setJavaArgs("-Xmx1G -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true");
+			}
 			
 			if (auth != null) {
 				game.setPlayerUUID(auth.getUuid());

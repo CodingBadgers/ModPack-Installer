@@ -15,5 +15,6 @@ public class ResourceInfo {
 	@Getter private InstallMethodType installMethod;
 	@Getter private FileType filetype;
 	@Getter private URL url;
+	@Getter private boolean compressed;
 	
 }
