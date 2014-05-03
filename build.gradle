@@ -12,7 +12,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven'
 apply plugin: 'application'
 
-repositories{
+repositories {
     mavenCentral()
 	mavenLocal()
 	maven {
@@ -29,11 +29,13 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 
 mainClassName = "com.mcbadgercraft.installer.Bootstrap"
 
-dependencies{
+dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'net.sf.jopt-simple:jopt-simple:4.5'
+
     compile 'io.github.thefishlive:bootstrap:1.0.1'
-    compile 'io.github.thefishlive:installer:1.1'
+    compile 'io.github.thefishlive:installer:1.2-SNAPSHOT'
+    compile 'io.github.thefishlive:mojang-launcher:1.0.0'
 	
     testCompile "junit:junit:4.11"
 }

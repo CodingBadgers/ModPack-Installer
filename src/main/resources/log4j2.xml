@@ -4,7 +4,6 @@
 	
 	<Properties>
 		<Property name="console.pattern">[%d{HH:mm:ss}] [%p]: %m%n</Property>
-		<Property name="log.dir">${env:APPDATA}/.minecraft/modpackinstaller/logs</Property>
 	</Properties>
 	
 	<Appenders>
@@ -27,19 +26,10 @@
 		<Panel name="LogError">
 			<PatternLayout pattern="[%-5p] %m%n" />
 		</Panel>
-		
-		<RollingRandomAccessFile name="File" fileName="${log.dir}/latest.log" filePattern="${log.dir}/%d{yyyy-MM-dd}-%i.log.gz">
-			<PatternLayout pattern="${console.pattern}" />
-			<Policies>
-				<TimeBasedTriggeringPolicy />
-				<OnStartupTriggeringPolicy />
-			</Policies>
-		</RollingRandomAccessFile>
 	</Appenders>
 	
 	<Loggers>
 		<Root level="info">
-			<AppenderRef ref="File" />
 		</Root>
 		
 		<Logger name="installer" level="info">

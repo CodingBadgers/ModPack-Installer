@@ -6,7 +6,6 @@ import javax.swing.UIManager;
 
 import com.mcbadgercraft.installer.gui.StartupFrame;
 import com.mcbadgercraft.installer.log.LogPanel;
-import com.mcbadgercraft.installer.mojang.ProfilesFile;
 import com.mcbadgercraft.installer.packs.PacksFile;
 
 
@@ -18,9 +17,9 @@ import lombok.Getter;
 
 import io.github.thefishlive.bootstrap.Bootstrapper;
 import io.github.thefishlive.bootstrap.Launcher;
-import io.github.thefishlive.installer.InstallerUtils;
 import io.github.thefishlive.installer.exception.InstallerException;
 import io.github.thefishlive.installer.log.InstallerLogger;
+import io.github.thefishlive.installer.options.InstallerOptions;
 
 public class Bootstrap implements Launcher {
 
@@ -31,12 +30,14 @@ public class Bootstrap implements Launcher {
 	@Getter private static final String version;
 	
 	private static OptionParser parser = null;
-	private static OptionSpec<?> debugOption = null;
+	private static OptionSpec<Boolean> debugOption = null;
+	private static OptionSpec<Boolean> threadedOption = null;
 	private static OptionSpec<?> helpOption = null;
 	
 	static {
 		parser = new OptionParser();
-		debugOption = parser.acceptsAll(Arrays.asList("debug", "d"), "Sets the program to debug mode");
+		debugOption = parser.acceptsAll(Arrays.asList("debug", "d"), "Sets the program to debug mode").withRequiredArg().ofType(Boolean.class).defaultsTo(false);
+		threadedOption = parser.acceptsAll(Arrays.asList("threaded", "t"), "Sets the installer to download files on multiple threads").withRequiredArg().ofType(Boolean.class).defaultsTo(true);
 		helpOption = parser.acceptsAll(Arrays.asList("help", "?"), "Shows the program help").forHelp();
 		
 		String pckgVersion = Bootstrap.class.getPackage().getImplementationVersion();
@@ -61,16 +62,21 @@ public class Bootstrap implements Launcher {
 			log.info("Starting AdminPack Installer v{}", version);
 			log.info("OS: {} ({}) [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
 			log.info("Java Version: {} ({})", System.getProperty("java.version"), System.getProperty("java.class.version"));
-			
+
 			OptionSet options = parser.parse(args);
 			
 			if (options.has(helpOption)) {
 				parser.printHelpOn(System.out);
+				System.exit(0);
 				return;
 			}
 			
-			InstallerUtils.setDebug(options.has(debugOption));
-			ProfilesFile.setup();
+			InstallerOptions.setDebug(debugOption.value(options));
+			InstallerOptions.setThreadedDownloads(threadedOption.value(options));
+
+            if (InstallerOptions.isDebug()) { log.info("Installer launched in debug mode..."); }
+            log.info("Threaded Downloads: {}", InstallerOptions.isThreadedDownloads());
+
 			PacksFile.setup();
 
 			startup = new StartupFrame();

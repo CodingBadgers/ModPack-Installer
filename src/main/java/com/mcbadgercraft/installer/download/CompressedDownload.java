@@ -1,6 +1,5 @@
 package com.mcbadgercraft.installer.download;
 
-import io.github.thefishlive.installer.download.Download;
 import io.github.thefishlive.installer.download.SimpleDownload;
 import io.github.thefishlive.installer.exception.InstallerException;
 
@@ -14,7 +13,7 @@ import com.mcbadgercraft.installer.Bootstrap;
 
 import lombok.Getter;
 
-public class CompressedDownload extends Download {
+public class CompressedDownload extends SimpleDownload {
 
 	private static final String EXTENTION = ".pack.xz";
 	
@@ -24,6 +23,7 @@ public class CompressedDownload extends Download {
 	@Getter private File uncompressedDest;
 
 	public CompressedDownload(URL url, File dest) throws IOException {
+		super(url, dest);
 		this.downloadUrl = URI.create(url.toString() + EXTENTION).toURL();
 		this.fileDest = new File(dest.getAbsolutePath() + EXTENTION);
 		
@@ -45,12 +45,5 @@ public class CompressedDownload extends Download {
 				throw ex;
 			}
 		}
-	}
-
-	@Override
-	public Download clone() {
-		Download download = new SimpleDownload(this.downloadUrl, this.fileDest);
-		download.active = this.active;
-		return download;
 	}
 }

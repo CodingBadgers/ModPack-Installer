@@ -5,13 +5,14 @@ import java.io.File;
 import com.mcbadgercraft.installer.Bootstrap;
 import com.mcbadgercraft.installer.ModPackInstaller;
 import com.mcbadgercraft.installer.config.InstallData;
-import com.mcbadgercraft.installer.mojang.AuthProfile;
-import com.mcbadgercraft.installer.mojang.GameProfile;
-import com.mcbadgercraft.installer.mojang.ProfilesFile;
 
 import io.github.thefishlive.installer.Installer;
 import io.github.thefishlive.installer.exception.InstallerException;
 import io.github.thefishlive.installer.task.Task;
+import io.github.thefishlive.minecraft.profiles.AuthProfile;
+import io.github.thefishlive.minecraft.profiles.GameProfile;
+import io.github.thefishlive.minecraft.profiles.JavaArgs;
+import io.github.thefishlive.minecraft.profiles.VisibilityRule;
 
 public class WriteProfileDataTask extends Task {
 
@@ -37,16 +38,16 @@ public class WriteProfileDataTask extends Task {
 			GameProfile game = new GameProfile(installdata.getProfileName());
 			{
 				game.setLastVersionId(installdata.getTarget());
-				game.setLauncherVisibilityOnGameClose("keep the launcher open");
+				game.setLauncherVisibility(VisibilityRule.KEEP_LAUNCHER);
 				game.setGameDir(gamedir);
-				game.setJavaArgs("-Xmx1G -Dfml.ignoreInvalidMinecraftCertificates=true -Dfml.ignorePatchDiscrepancies=true");
+				game.setJavaArgs(new JavaArgs().setMaxMemory("1G").addSysProperty("fml.ignoreInvalidMinecraftCertificates", "true").addSysProperty("fml.ignorePatchDiscrepancies", "true"));
 			}
 			
 			if (auth != null) {
 				game.setPlayerUUID(auth.getUuid());
 			}
 			
-			ProfilesFile.getInstance().addProfile(game);
+			modpack.getProfilesFile().addProfile(game);
 		} catch (Exception ex) {
 			throw new InstallerException(ex);
 		}

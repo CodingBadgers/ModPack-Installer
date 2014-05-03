@@ -26,7 +26,6 @@ public class ProgressMonitor {
 			panel.setProgress(1);
 			panel.setMaximum(1);
 		}
-		
 	}
 	
 	@Subscribe

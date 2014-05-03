@@ -6,17 +6,28 @@ import io.github.thefishlive.installer.exception.InstallerException;
 import static io.github.thefishlive.installer.InstallPhase.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 
 import com.mcbadgercraft.installer.config.PackConfig;
 import com.mcbadgercraft.installer.tasks.*;
 
+import io.github.thefishlive.minecraft.profiles.ProfilesFile;
 import lombok.Getter;
 
 public class ModPackInstaller extends Installer {
 
 	@Getter private static final File launcherDir = new File(InstallerUtils.getAppData(), ".minecraft");
+    @Getter private static ProfilesFile profilesFile;
 	@Getter private final PackConfig config;
+
+    static {
+        try {
+            profilesFile = ProfilesFile.load(new File(launcherDir, "launcher_profiles.json"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 	
 	public ModPackInstaller(URL datalink) throws InstallerException {
 		config = PackConfig.loadConfig(datalink);

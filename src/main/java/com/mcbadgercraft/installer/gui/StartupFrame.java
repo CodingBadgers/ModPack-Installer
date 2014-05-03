@@ -16,8 +16,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.mcbadgercraft.installer.Bootstrap;
 import com.mcbadgercraft.installer.ModPackInstaller;
-import com.mcbadgercraft.installer.mojang.AuthProfile;
-import com.mcbadgercraft.installer.mojang.ProfilesFile;
 import com.mcbadgercraft.installer.monitor.ProgressMonitor;
 import com.mcbadgercraft.installer.packs.PacksFile;
 import com.mcbadgercraft.installer.packs.PacksFile.PackInfo;
@@ -30,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import io.github.thefishlive.minecraft.profiles.AuthProfile;
 import lombok.Cleanup;
 import lombok.Getter;
 
@@ -76,7 +75,7 @@ public class StartupFrame extends JFrame {
 		cbxProfile.setBounds(10, 229, 181, 20);
 		contentPane.add(cbxProfile);
 		
-		for (AuthProfile profile : ProfilesFile.getInstance().getAuthenticationDatabase().values()) {
+		for (AuthProfile profile : ModPackInstaller.getProfilesFile().getAuthenticationDatabase().values()) {
 			cbxProfile.addItem(profile);
 		}
 		
@@ -145,8 +144,14 @@ public class StartupFrame extends JFrame {
 			System.exit(0);
 		} catch (InstallerException e) {
 			InstallerLogger log = Bootstrap.getLog();
-			log.user("A unexpected error has occurred.\n" + e.getMessage() + "\nCheck log for more details");
+			log.user("A error has occurred during the running of the installer.\n" + e.getMessage() + "\nCheck log for more details");
 			log.fatal("A error has occurred trying to install this modpack to your computer");
+			log.fatal("Message: " + e.getMessage());
+			log.fatal("Stacktrace: ", e);
+		} catch (Throwable e) {
+			InstallerLogger log = Bootstrap.getLog();
+			log.user("A unexpected error has occurred during the running of the installer.\n" + e.getMessage() + "\nCheck log for more details");
+			log.fatal("A unexpected error has occurred trying to install this modpack to your computer");
 			log.fatal("Message: " + e.getMessage());
 			log.fatal("Stacktrace: ", e);
 		}
