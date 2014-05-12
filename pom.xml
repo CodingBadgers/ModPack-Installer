@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.mcbadgercraft</groupId>
+    <artifactId>ModPack-Installer</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>ModPack Installer</name>
+
+    <properties>
+        <installer.version>1.2-SNAPSHOT</installer.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jopt-simple</groupId>
+            <artifactId>jopt-simple</artifactId>
+            <version>4.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.thefishlive</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.thefishlive</groupId>
+            <artifactId>installer</artifactId>
+            <version>1.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.thefishlive</groupId>
+            <artifactId>mojang-launcher</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <main-class>com.mcbadgercraft.installer.Bootstrap</main-class>
+
+                            <Implementation-Title>${project.name}</Implementation-Title>
+                            <Implementation-Vendor>${project.groupId}</Implementation-Vendor>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+
+                            <Specification-Title>Installer</Specification-Title>
+                            <Specification-Vendor>io.github.thefishlive</Specification-Vendor>
+                            <Specification-Version>${installer.version}</Specification-Version>
+                        </manifestEntries>
+						<manifestSections>
+							<manifestSection>
+								<name>Bootstrap</name>
+								<manifestEntries>
+									<Java-Version>1.7</Java-Version>
+									<Java-Class-Version>51.0</Java-Class-Version>
+								</manifestEntries>
+							</manifestSection>
+						</manifestSections>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

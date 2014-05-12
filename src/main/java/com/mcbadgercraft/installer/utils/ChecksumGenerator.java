@@ -10,17 +10,21 @@ import java.security.NoSuchAlgorithmException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChecksumGenerator {
 
-	private static final int BUFFER = 128 << 6; // 8192
-	
+    private static final int BUFFER = 128 << 6; // 8192
+    
+    private static final String MD_5 = "MD5";
+    private static final String SHA_1 = "SHA-1";
+
+    private ChecksumGenerator() {}
+
 	public static String createSha1(File file) throws IOException, NoSuchAlgorithmException  {
-	    return createHash(file, "SHA-1");
+	    return createHash(file, SHA_1);
 	}
 
 	public static String createMD5(File file) throws IOException, NoSuchAlgorithmException  {
-	    return createHash(file, "MD5");
+	    return createHash(file, MD_5);
 	}
 	
 	private static String createHash(File file, String algorithm) throws IOException, NoSuchAlgorithmException {
