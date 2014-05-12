@@ -12,6 +12,8 @@ import com.mcbadgercraft.installer.resource.FileType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import javax.swing.*;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Utils {
 	
@@ -26,4 +28,12 @@ public class Utils {
 	public static String readURLContents(URL url) throws IOException {
 		return Resources.toString(url, Charset.forName("UTF-8"));
 	}
+
+    public static int showError(String... message) {
+        StringBuilder builder = new StringBuilder();
+        for (String line : message) {
+            builder.append(line).append("\n");
+        }
+        return JOptionPane.showConfirmDialog(null, builder.toString(), "ModPack-Installer", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+    }
 }

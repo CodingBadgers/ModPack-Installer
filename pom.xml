@@ -13,6 +13,14 @@
         <installer.version>1.2-SNAPSHOT</installer.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>codingbadgers-repo</id>
+            <name>codingbadgers-repo</name>
+            <url>http://repository-codingbadgers.forge.cloudbees.com/snapshot/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>

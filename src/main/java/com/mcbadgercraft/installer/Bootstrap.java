@@ -2,13 +2,15 @@ package com.mcbadgercraft.installer;
 
 import java.util.Arrays;
 
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import com.mcbadgercraft.installer.gui.StartupFrame;
 import com.mcbadgercraft.installer.log.LogPanel;
 import com.mcbadgercraft.installer.packs.PacksFile;
 
 
+import com.mcbadgercraft.installer.utils.MinecraftUtils;
+import com.mcbadgercraft.installer.utils.Utils;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -32,12 +34,14 @@ public class Bootstrap implements Launcher {
 	private static OptionParser parser = null;
 	private static OptionSpec<Boolean> debugOption = null;
 	private static OptionSpec<Boolean> threadedOption = null;
+	private static OptionSpec<?> minecraftOption = null;
 	private static OptionSpec<?> helpOption = null;
 	
 	static {
 		parser = new OptionParser();
 		debugOption = parser.acceptsAll(Arrays.asList("debug", "d"), "Sets the program to debug mode").withRequiredArg().ofType(Boolean.class).defaultsTo(false);
 		threadedOption = parser.acceptsAll(Arrays.asList("threaded", "t"), "Sets the installer to download files on multiple threads").withRequiredArg().ofType(Boolean.class).defaultsTo(true);
+        minecraftOption = parser.acceptsAll(Arrays.asList("minecraft", "mc"), "Tells the installer to ignore currently running minecraft instances");
 		helpOption = parser.acceptsAll(Arrays.asList("help", "?"), "Shows the program help").forHelp();
 		
 		String pckgVersion = Bootstrap.class.getPackage().getImplementationVersion();
@@ -70,6 +74,23 @@ public class Bootstrap implements Launcher {
 				System.exit(0);
 				return;
 			}
+
+            if (!options.has(minecraftOption) && MinecraftUtils.isMinecraftRunning()) {
+                log.warn("It looks like you have minecraft running.");
+                log.warn("To run this installer you must close minecraft and its launcher otherwise the installation might mess up.");
+
+                int result = Utils.showError("It looks like you have minecraft running.",
+                                                "",
+                                                "To run this installer you must close minecraft",
+                                                "and its launcher otherwise the installation will",
+                                                "not work as intended.");
+
+                if (result == JOptionPane.CANCEL_OPTION) {
+                    log.info("Stopping installer as minecraft is already running");
+                    System.exit(0);
+                    return;
+                }
+            }
 			
 			InstallerOptions.setDebug(debugOption.value(options));
 			InstallerOptions.setThreadedDownloads(threadedOption.value(options));
