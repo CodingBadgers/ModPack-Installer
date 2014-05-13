@@ -17,4 +17,7 @@ public class LibraryInstallMethod implements InstallMethod {
 		return new File(launcherdir, "libraries" + File.separator + Utils.createPath(info.getArtifactId(), FileType.JAR));
 	}
 
+    @Override
+    public File postDownload(File resource, ResourceInfo info) { return null; }
+
 }

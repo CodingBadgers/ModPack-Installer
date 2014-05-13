@@ -24,6 +24,7 @@ public class PackConfig {
 	@Getter private static final int currentVersion = 6;
 	@Getter private static final Gson gson = new GsonBuilder()
 													.setPrettyPrinting()
+                                                    .setVersion(currentVersion)
 													.registerTypeAdapter(ArtifactId.class, new ArtifactIdAdapter())
 													.registerTypeAdapter(UUID.class, new UUIDAdapter())
 													.registerTypeAdapter(File.class, new FileAdapter())

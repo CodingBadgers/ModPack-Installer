@@ -13,4 +13,6 @@ public class ResourceInstallMethod implements InstallMethod {
 		return new File(builder.toString());
 	}
 
+    @Override
+    public File postDownload(File resource, ResourceInfo info) { return null; }
 }

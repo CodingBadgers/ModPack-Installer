@@ -73,6 +73,7 @@ public class StartupFrame extends JFrame {
 		
 		cbxProfile = new JComboBox<AuthProfile>();
 		cbxProfile.setBounds(10, 229, 181, 20);
+        cbxProfile.setRenderer(new ComboBoxRenderer());
 		contentPane.add(cbxProfile);
 		
 		for (AuthProfile profile : ModPackInstaller.getProfilesFile().getAuthenticationDatabase().values()) {
@@ -93,6 +94,7 @@ public class StartupFrame extends JFrame {
 			}
 		});
 		cbxModPack.setBounds(66, 99, 224, 20);
+        cbxModPack.setRenderer(new ComboBoxRenderer());
 		contentPane.add(cbxModPack);
 
 		for (PackInfo profile : PacksFile.getInstance().getPacks()) {
@@ -133,7 +135,7 @@ public class StartupFrame extends JFrame {
 				return;
 			}
 			
-			ModPackInstaller installer = new ModPackInstaller(modpack.getData());
+			ModPackInstaller installer = new ModPackInstaller(modpack.getDataUrl());
 			installer.getBus().register(new ProgressMonitor());
 			
 			if (!installer.perform()) {

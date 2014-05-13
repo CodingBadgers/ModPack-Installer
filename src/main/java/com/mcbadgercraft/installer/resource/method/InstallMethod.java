@@ -8,4 +8,6 @@ public interface InstallMethod {
 
 	public File createPath(File gamedir, ResourceInfo info);
 
+    public File postDownload(File resource, ResourceInfo info);
+
 }

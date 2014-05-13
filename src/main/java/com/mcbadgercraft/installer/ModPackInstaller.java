@@ -38,11 +38,13 @@ public class ModPackInstaller extends Installer {
 		addTask(PRE_DOWNLOAD, new WriteVersionDataTask(launcherDir));
 		addTask(PRE_DOWNLOAD, new CreateMcDownloadTask(launcherDir));
 		addTask(PRE_DOWNLOAD, new CopySettingsTask(launcherDir, gamedir).addDependency("createDir"));
-		addTask(PRE_DOWNLOAD, new CreateResourceDownloads(gamedir).addDependency("createDir"));
+        addTask(PRE_DOWNLOAD, new SetupMinecraftDirectoryTask(gamedir).addDependency("createDir"));
+        addTask(PRE_DOWNLOAD, new CreateResourceDownloads(gamedir).addDependency("setupDirectory"));
 		addTask(PRE_DOWNLOAD, new CreateLibraryDownloadsTask(launcherDir));
 		addTask(PRE_DOWNLOAD, new WriteProfileDataTask(gamedir));
 		
 		addTask(POST_DOWNLOAD, new UnpackDownloadsTask());
 		addTask(POST_DOWNLOAD, new ValidateDownloadsTask().addDependency("unpackDownloads"));
+        addTask(POST_DOWNLOAD, new PostDownloadTask(gamedir));
 	}
 }

@@ -2,10 +2,14 @@ package com.mcbadgercraft.installer.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.jar.Manifest;
 
 import com.google.common.io.Resources;
+import com.mcbadgercraft.installer.Bootstrap;
 import com.mcbadgercraft.installer.config.ArtifactId;
 import com.mcbadgercraft.installer.resource.FileType;
 
@@ -35,5 +39,30 @@ public class Utils {
             builder.append(line).append("\n");
         }
         return JOptionPane.showConfirmDialog(null, builder.toString(), "ModPack-Installer", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+    }
+
+    public static URL constantUrl(String s) {
+        try {
+            return URI.create(s).toURL();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Manifest getManifest() {
+        Class clazz = Bootstrap.class;
+        String className = clazz.getSimpleName() + ".class";
+        String classPath = clazz.getResource(className).toString();
+        if (!classPath.startsWith("jar")) { // Class not from JAR, this should never happen
+            return null;
+        }
+
+        try {
+            String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
+            return new Manifest(new URL(manifestPath).openStream());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 }
