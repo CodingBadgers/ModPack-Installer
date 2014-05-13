@@ -2,13 +2,11 @@ package com.mcbadgercraft.installer.tasks;
 
 import com.mcbadgercraft.installer.ModPackInstaller;
 import com.mcbadgercraft.installer.config.ResourceInfo;
-
 import io.github.thefishlive.installer.Installer;
 import io.github.thefishlive.installer.exception.InstallerException;
 import io.github.thefishlive.installer.task.Task;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class PostDownloadTask extends Task {

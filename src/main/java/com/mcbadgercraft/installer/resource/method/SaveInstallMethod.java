@@ -27,9 +27,9 @@ public class SaveInstallMethod implements InstallMethod {
         File outputDir = new File(zipFile.getName().substring(0, zipFile.getName().lastIndexOf('.')));
         byte[] buffer = new byte[BUFFER];
 
-        try{
+        try {
             //create output directory is not exists
-            if(!outputDir.exists()){
+            if (!outputDir.exists()) {
                 outputDir.mkdir();
             }
 

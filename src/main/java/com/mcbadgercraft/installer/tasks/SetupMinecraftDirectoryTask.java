@@ -8,7 +8,7 @@ import java.io.File;
 
 public class SetupMinecraftDirectoryTask extends Task {
 
-    private static final String[] DIRS = new String[] {"mods", "saves", "config", "resourcepacks", "shaderpacks", "logs", "liteconfig"};
+    private static final String[] DIRS = new String[]{"mods", "saves", "config", "resourcepacks", "shaderpacks", "logs", "liteconfig"};
 
     private final File gameDir;
 

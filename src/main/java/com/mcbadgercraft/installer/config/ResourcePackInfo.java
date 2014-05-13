@@ -6,6 +6,7 @@ import lombok.ToString;
 @ToString
 public class ResourcePackInfo {
 
-	@Getter private String active;
-	
+    @Getter
+    private String active;
+
 }

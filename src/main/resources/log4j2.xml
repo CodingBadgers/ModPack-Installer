@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn" name="ModPack-Installer"
-	packages="com.mcbadgercraft.installer,io.github.thefishlive.installer">
-	
-	<Properties>
-		<Property name="console.pattern">[%d{HH:mm:ss}] [%p]: %m%n</Property>
-	</Properties>
-	
-	<Appenders>
-		<Console name="Console" target="SYSTEM_OUT">
-			<PatternLayout pattern="${console.pattern}" />
-		</Console>
-		
-		<Console name="Error" target="SYSTEM_ERR">
-			<PatternLayout pattern="${console.pattern}" />
-		</Console>
-		
-		<MessageBox name="Message">
-			<PatternLayout pattern="%m" />
-		</MessageBox>
-		
-		<Panel name="Log">
-			<PatternLayout pattern="[%-5p] %m%n" />
-		</Panel>
-		
-		<Panel name="LogError">
-			<PatternLayout pattern="[%-5p] %m%n" />
-		</Panel>
-	</Appenders>
-	
-	<Loggers>
-		<Root level="info">
-		</Root>
-		
-		<Logger name="installer" level="info">
-			<AppenderRef ref="Console" />
-			<AppenderRef ref="Log" level="info"/>
-		</Logger>
-		
-		<Logger name="installer.user" level="info">
-			<AppenderRef ref="Message"/>
-		</Logger>
-		
-		<Logger name="installer.debug" level="debug" />
-		
-		<Logger name="error" level="warn">
-			<AppenderRef ref="Error" />
-			<AppenderRef ref="LogError" level="info"/>
-		</Logger>
-	</Loggers>
+               packages="com.mcbadgercraft.installer,io.github.thefishlive.installer">
+
+    <Properties>
+        <Property name="console.pattern">[%d{HH:mm:ss}] [%p]: %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${console.pattern}"/>
+        </Console>
+
+        <Console name="Error" target="SYSTEM_ERR">
+            <PatternLayout pattern="${console.pattern}"/>
+        </Console>
+
+        <MessageBox name="Message">
+            <PatternLayout pattern="%m"/>
+        </MessageBox>
+
+        <Panel name="Log">
+            <PatternLayout pattern="[%-5p] %m%n"/>
+        </Panel>
+
+        <Panel name="LogError">
+            <PatternLayout pattern="[%-5p] %m%n"/>
+        </Panel>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+        </Root>
+
+        <Logger name="installer" level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Log" level="info"/>
+        </Logger>
+
+        <Logger name="installer.user" level="info">
+            <AppenderRef ref="Message"/>
+        </Logger>
+
+        <Logger name="installer.debug" level="debug"/>
+
+        <Logger name="error" level="warn">
+            <AppenderRef ref="Error"/>
+            <AppenderRef ref="LogError" level="info"/>
+        </Logger>
+    </Loggers>
 </Configuration>
