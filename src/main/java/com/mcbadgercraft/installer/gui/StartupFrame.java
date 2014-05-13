@@ -142,13 +142,13 @@ public class StartupFrame extends JFrame {
             InstallerLogger log = Bootstrap.getLog();
             log.user("A error has occurred during the running of the installer.\n" + e.getMessage() + "\nCheck log for more details");
             log.fatal("A error has occurred trying to install this modpack to your computer");
-            log.fatal("Message: " + e.getMessage());
+            log.fatal("Message: {}", e.getMessage());
             log.fatal("Stacktrace: ", e);
         } catch (Throwable e) {
             InstallerLogger log = Bootstrap.getLog();
             log.user("A unexpected error has occurred during the running of the installer.\n" + e.getMessage() + "\nCheck log for more details");
             log.fatal("A unexpected error has occurred trying to install this modpack to your computer");
-            log.fatal("Message: " + e.getMessage());
+            log.fatal("Message: {}", e.getMessage());
             log.fatal("Stacktrace: ", e);
         }
     }
