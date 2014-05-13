@@ -46,7 +46,9 @@ public class WriteProfileDataTask extends Task {
                 game.setPlayerUUID(auth.getUuid());
             }
 
-            modpack.getProfilesFile().addProfile(game);
+            ModPackInstaller.getProfilesFile().addProfile(game);
+            ModPackInstaller.getProfilesFile().setSelectedProfile(game);
+            ModPackInstaller.getProfilesFile().write();
         } catch (Exception ex) {
             throw new InstallerException(ex);
         }
