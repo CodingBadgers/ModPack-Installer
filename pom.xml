@@ -6,7 +6,7 @@
 
     <groupId>com.mcbadgercraft</groupId>
     <artifactId>ModPack-Installer</artifactId>
-    <version>2.3.0-SNAPHOT</version>
+    <version>2.2.1-SNAPHOT</version>
     <name>ModPack Installer</name>
 
     <properties>
@@ -44,13 +44,13 @@
         <dependency>
             <groupId>io.github.thefishlive</groupId>
             <artifactId>installer</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <version>1.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.github.thefishlive</groupId>
             <artifactId>mojang-launcher</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
