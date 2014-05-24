@@ -6,7 +6,7 @@
 
     <groupId>com.mcbadgercraft</groupId>
     <artifactId>ModPack-Installer</artifactId>
-    <version>2.2.1-SNAPHOT</version>
+    <version>2.2.1</version>
     <name>ModPack Installer</name>
 
     <properties>
