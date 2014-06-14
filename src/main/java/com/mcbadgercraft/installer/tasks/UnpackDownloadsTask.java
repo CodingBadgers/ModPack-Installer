@@ -20,7 +20,7 @@ import java.util.jar.Pack200;
 
 public class UnpackDownloadsTask extends Task {
 
-    private static final String PACK_EXTENTION = ".pack.xz";
+    public static final String PACK_EXTENSION = ".pack.xz";
 
     public UnpackDownloadsTask() {
         super("unpackDownloads");
@@ -36,14 +36,14 @@ public class UnpackDownloadsTask extends Task {
         for (Iterator<File> itr = files.iterator(); itr.hasNext(); ) {
             cur = itr.next();
 
-            if (cur.getName().endsWith(PACK_EXTENTION)) {
+            if (cur.getName().endsWith(PACK_EXTENSION)) {
                 try {
                     Bootstrap.getLog().debug("Decompressing {}.", cur.getName());
                     decompress(cur);
                 } catch (XZFormatException ex) {
                     // This wasn't meant to be, rename back to a jar file
                     Bootstrap.getLog().warn(cur.getName() + " is not a valid XZ compressed file.");
-                    cur.renameTo(new File(cur.getParentFile(), cur.getName().substring(0, cur.getName().length() - PACK_EXTENTION.length())));
+                    cur.renameTo(new File(cur.getParentFile(), cur.getName().substring(0, cur.getName().length() - PACK_EXTENSION.length())));
                 } catch (IOException ex) {
                     Bootstrap.getLog().warn(cur.getName() + " could not be decompressed correctly.");
                     throw new InstallerException(ex);
@@ -55,7 +55,7 @@ public class UnpackDownloadsTask extends Task {
     }
 
     private File decompress(File download) throws IOException {
-        File dest = new File(download.getAbsolutePath().substring(0, download.getAbsolutePath().length() - PACK_EXTENTION.length()));
+        File dest = new File(download.getAbsolutePath().substring(0, download.getAbsolutePath().length() - PACK_EXTENSION.length()));
 
         if (dest.exists()) {
             dest.delete();

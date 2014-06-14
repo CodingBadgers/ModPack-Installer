@@ -48,6 +48,7 @@ public class ModPackInstaller extends Installer {
 
         addTask(POST_DOWNLOAD, new UnpackDownloadsTask());
         addTask(POST_DOWNLOAD, new ValidateDownloadsTask().addDependency("unpackDownloads"));
+        addTask(POST_DOWNLOAD, new ValidatePackedDownloadsTask().addDependency("unpackDownloads"));
         addTask(POST_DOWNLOAD, new PostDownloadTask(gamedir));
     }
 }
