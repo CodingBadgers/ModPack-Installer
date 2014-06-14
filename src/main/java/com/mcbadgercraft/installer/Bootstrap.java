@@ -1,5 +1,6 @@
 package com.mcbadgercraft.installer;
 
+import com.mcbadgercraft.installer.crash.VersionSection;
 import com.mcbadgercraft.installer.gui.StartupFrame;
 import com.mcbadgercraft.installer.log.LogPanel;
 import com.mcbadgercraft.installer.packs.PacksFile;
@@ -7,15 +8,22 @@ import com.mcbadgercraft.installer.utils.MinecraftUtils;
 import com.mcbadgercraft.installer.utils.Utils;
 import io.github.thefishlive.bootstrap.Bootstrapper;
 import io.github.thefishlive.bootstrap.Launcher;
+import io.github.thefishlive.crash.CrashReport;
+import io.github.thefishlive.installer.crash.CrashReporter;
 import io.github.thefishlive.installer.exception.InstallerException;
 import io.github.thefishlive.installer.log.InstallerLogger;
 import io.github.thefishlive.installer.options.InstallerOptions;
+import io.github.thefishlive.upload.UploadTarget;
+import io.github.thefishlive.upload.UploadTargets;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import lombok.Getter;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
 import java.util.Arrays;
 
 public class Bootstrap implements Launcher {
@@ -25,9 +33,8 @@ public class Bootstrap implements Launcher {
     @Getter
     private static final LogPanel logPanel = new LogPanel();
     @Getter
-    private static final String version;
-    @Getter
     private static StartupFrame startup = null;
+
     private static OptionParser parser = null;
     private static OptionSpec<Boolean> debugOption = null;
     private static OptionSpec<Boolean> threadedOption = null;
@@ -41,13 +48,7 @@ public class Bootstrap implements Launcher {
         minecraftOption = parser.acceptsAll(Arrays.asList("minecraft", "mc"), "Tells the installer to ignore currently running minecraft instances");
         helpOption = parser.acceptsAll(Arrays.asList("help", "?"), "Shows the program help").forHelp();
 
-        String pckgVersion = Bootstrap.class.getPackage().getImplementationVersion();
-
-        if (pckgVersion == null) {
-            pckgVersion = "[dev-SNAPSHOT]";
-        }
-
-        version = pckgVersion;
+        CrashReporter.registerSection(new VersionSection());
     }
 
     public static void main(String[] args) throws Exception {
@@ -60,7 +61,8 @@ public class Bootstrap implements Launcher {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
             logPanel.setVisible(true);
-            log.info("Starting AdminPack Installer v{}", version);
+            log.info("Starting AdminPack Installer v{}", VersionConstants.IMPLEMENTATION_VERSION);
+            log.info("Implementing installer version {}", VersionConstants.SPECIFICATION_VERSION);
             log.info("OS: {} ({}) [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
             log.info("Java Version: {} ({})", System.getProperty("java.version"), System.getProperty("java.class.version"));
 
@@ -106,10 +108,14 @@ public class Bootstrap implements Launcher {
             log.error("A error has occurred causing the installer to crash");
             log.error("Exception: " + ex.getMessage());
             log.error("Stacktrace: ", ex);
+
+            CrashReporter.uploadCrashReport("A error has occurred causing the installer to crash", ex);
         } catch (Throwable throwable) {
             log.fatal("A unexpected error has occurred causing the installer to crash");
             log.fatal("Exception: " + throwable.getMessage());
             log.fatal("Stacktrace: ", throwable);
+
+            CrashReporter.uploadCrashReport("A unexpected error has occurred causing the installer to crash", throwable);
         }
     }
 
