@@ -2,6 +2,7 @@ package com.mcbadgercraft.installer.tasks;
 
 import com.google.common.io.Files;
 import com.mcbadgercraft.installer.ModPackInstaller;
+import com.mcbadgercraft.installer.download.MinecraftDownload;
 import io.github.thefishlive.installer.Installer;
 import io.github.thefishlive.installer.download.SimpleDownload;
 import io.github.thefishlive.installer.exception.InstallerException;
@@ -40,7 +41,7 @@ public class CreateMcDownloadTask extends Task {
             }
 
             URL url = new URL(String.format("http://s3.amazonaws.com/Minecraft.Download/versions/%1$s/%1$s.jar", version));
-            installer.addDownload(new SimpleDownload(url, dest));
+            installer.addDownload(new MinecraftDownload(url, dest));
         } catch (IOException e) {
             throw new InstallerException(e);
         }

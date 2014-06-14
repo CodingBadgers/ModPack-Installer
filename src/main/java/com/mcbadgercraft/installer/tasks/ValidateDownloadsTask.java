@@ -48,11 +48,13 @@ public class ValidateDownloadsTask extends Task {
                 }
 
                 if (remote != null && !local.equalsIgnoreCase(remote)) {
-                    throw new InstallerException("Local and remote files do not match (" + curFile.getName() + ")");
+                    throw new InstallerException(String.format("Local and remote files do not match (%s)", curFile.getName()));
                 }
             } catch (FileNotFoundException e) {
-                Bootstrap.getLog().debug("Download for " + curFile.getName() + " did not provide a sha1 hash.");
-            } catch (NoSuchAlgorithmException | IOException e) {
+                Bootstrap.getLog().debug("Download for {} did not provide a sha1 hash.", curFile.getName());
+            } catch (IOException ex) {
+                Bootstrap.getLog().error("Error getting checksum for file {} ({})", curFile.getName(), ex.getMessage());
+            } catch (NoSuchAlgorithmException e) {
                 throw new InstallerException(e);
             }
         }
