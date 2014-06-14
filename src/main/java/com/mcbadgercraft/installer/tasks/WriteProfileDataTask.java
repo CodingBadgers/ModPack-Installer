@@ -6,6 +6,7 @@ import com.mcbadgercraft.installer.config.InstallData;
 import io.github.thefishlive.installer.Installer;
 import io.github.thefishlive.installer.exception.InstallerException;
 import io.github.thefishlive.installer.task.Task;
+import io.github.thefishlive.minecraft.ReleaseType;
 import io.github.thefishlive.minecraft.profiles.AuthProfile;
 import io.github.thefishlive.minecraft.profiles.GameProfile;
 import io.github.thefishlive.minecraft.profiles.JavaArgs;
@@ -38,6 +39,7 @@ public class WriteProfileDataTask extends Task {
             {
                 game.setLastVersionId(installdata.getTarget());
                 game.setLauncherVisibility(VisibilityRule.KEEP_LAUNCHER);
+                game.addReleaseType(ReleaseType.RELEASE);
                 game.setGameDir(gamedir);
                 game.setJavaArgs(new JavaArgs().setMaxMemory("1G").addSysProperty("fml.ignoreInvalidMinecraftCertificates", "true").addSysProperty("fml.ignorePatchDiscrepancies", "true"));
             }
