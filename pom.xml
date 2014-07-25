@@ -125,7 +125,7 @@
             <plugin>
                 <groupId>io.github.thefishlive</groupId>
                 <artifactId>libraries-generator-plugin</artifactId>
-                <version>1.1.0-SNAPSHOT</version>
+                <version>1.1.0</version>
                 <configuration>
                     <urls>
                         <io.github.thefishlive>http://repository-codingbadgers.forge.cloudbees.com/snapshot/</io.github.thefishlive>
