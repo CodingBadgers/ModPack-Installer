@@ -18,6 +18,8 @@ import java.util.jar.Manifest;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Utils {
+	
+	private static JavaVersion version;
 
     public static String createPath(ArtifactId artifact, FileType type) {
         StringBuilder dest = new StringBuilder();
@@ -46,9 +48,23 @@ public class Utils {
             throw new RuntimeException(e);
         }
     }
+    
+    public static JavaVersion getJavaVersion() {
+    	if (version == null) {
+	    	float classVersion = Float.parseFloat(System.getProperty("java.class.version"));
+	    	
+	    	for (JavaVersion version : JavaVersion.values()) {
+	    		if (version.getClassVersion() == Math.abs(classVersion)) {
+	    			Utils.version =  version;
+	    		}
+	    	}
+    	}
+    	
+    	return version;
+    }
 
     public static Manifest getManifest() {
-        Class clazz = Bootstrap.class;
+        Class<Bootstrap> clazz = Bootstrap.class;
         String className = clazz.getSimpleName() + ".class";
         String classPath = clazz.getResource(className).toString();
         if (!classPath.startsWith("jar")) { // Class not from JAR, this should never happen

@@ -55,6 +55,8 @@ public class UnpackDownloadsTask extends Task {
     }
 
     private File decompress(File download) throws IOException {
+        if (!download.exists()) return download;
+
         File dest = new File(download.getAbsolutePath().substring(0, download.getAbsolutePath().length() - PACK_EXTENSION.length()));
 
         if (dest.exists()) {

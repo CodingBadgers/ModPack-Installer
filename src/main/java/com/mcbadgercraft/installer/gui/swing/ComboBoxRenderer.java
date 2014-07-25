@@ -1,10 +1,13 @@
-package com.mcbadgercraft.installer.gui;
+package com.mcbadgercraft.installer.gui.swing;
 
+import com.mcbadgercraft.installer.gui.Named;
 import com.mcbadgercraft.installer.packs.PacksFile;
+
 import io.github.thefishlive.minecraft.profiles.AuthProfile;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
+
 import java.awt.*;
 
 public class ComboBoxRenderer extends BasicComboBoxRenderer {
@@ -18,8 +21,8 @@ public class ComboBoxRenderer extends BasicComboBoxRenderer {
 
         if (value instanceof AuthProfile) {
             setText(((AuthProfile) value).getUsername());
-        } else if (value instanceof PacksFile.PackInfo) {
-            setText(((PacksFile.PackInfo) value).getName());
+        } else if (value instanceof Named) {
+            setText(((Named) value).getName());
         }
 
         return this;

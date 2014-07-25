@@ -32,10 +32,10 @@ public class ModPackInstaller extends Installer {
         }
     }
 
-    public ModPackInstaller(URL datalink) throws InstallerException {
-        config = PackConfig.loadConfig(datalink);
+    public ModPackInstaller(PackConfig config) throws InstallerException {
+        this.config = config;
 
-        File gamedir = new File(InstallerUtils.getAppData(), String.format(".%1$s", config.getGamedir().getName()));
+        File gamedir = new File(InstallerUtils.getAppData(), String.format(".%s", config.getGamedir().getName()));
 
         addTask(PRE_DOWNLOAD, new CreateDirTask(gamedir));
         addTask(PRE_DOWNLOAD, new WriteVersionDataTask(launcherDir));

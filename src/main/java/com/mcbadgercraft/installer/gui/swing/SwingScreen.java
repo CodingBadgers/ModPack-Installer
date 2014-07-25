@@ -1,12 +1,14 @@
-package com.mcbadgercraft.installer.gui;
+package com.mcbadgercraft.installer.gui.swing;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.mcbadgercraft.installer.Bootstrap;
 import com.mcbadgercraft.installer.ModPackInstaller;
+import com.mcbadgercraft.installer.gui.Screen;
 import com.mcbadgercraft.installer.monitor.ProgressMonitor;
-import com.mcbadgercraft.installer.packs.PacksFile;
-import com.mcbadgercraft.installer.packs.PacksFile.PackInfo;
+import com.mcbadgercraft.installer.packs.ModPack;
+import com.mcbadgercraft.installer.packs.PackRepositoryHandler;
+
 import io.github.thefishlive.installer.exception.InstallerException;
 import io.github.thefishlive.installer.log.InstallerLogger;
 import io.github.thefishlive.minecraft.profiles.AuthProfile;
@@ -16,6 +18,7 @@ import lombok.Getter;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -25,22 +28,25 @@ import java.io.InputStream;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class StartupFrame extends JFrame {
+public class SwingScreen extends JFrame implements Screen {
 
     private static final Splitter NEW_LINE = Splitter.on('\n').omitEmptyStrings().trimResults();
+    private final PackRepositoryHandler repoHandler;
     private JPanel contentPane;
     private List<JLabel> description = Lists.newArrayList();
     @Getter
-    private JComboBox<PackInfo> cbxModPack;
-    @Getter
-    private JComboBox<AuthProfile> cbxProfile;
+    private JComboBox<ModPack> cbxModPack;
 
     /**
      * Create the frame.
      */
-    public StartupFrame() throws IOException {
+    public SwingScreen() throws IOException {
+        this.repoHandler = Bootstrap.getInstance().getPackRepositoryHandler();
+    }
+    
+    public void init() throws IOException {
         setTitle("Mod Pack Installer");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 316, 300);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -65,22 +71,13 @@ public class StartupFrame extends JFrame {
         btnInstall.setBounds(201, 228, 89, 23);
         contentPane.add(btnInstall);
 
-        cbxProfile = new JComboBox<AuthProfile>();
-        cbxProfile.setBounds(10, 229, 181, 20);
-        cbxProfile.setRenderer(new ComboBoxRenderer());
-        contentPane.add(cbxProfile);
-
-        for (AuthProfile profile : ModPackInstaller.getProfilesFile().getAuthenticationDatabase().values()) {
-            cbxProfile.addItem(profile);
-        }
-
         JLabel logo = new JLabel("");
         @Cleanup InputStream image = getClass().getResourceAsStream("/big_logo.png");
         logo.setIcon(new ImageIcon(ImageIO.read(image)));
         logo.setBounds(0, 0, 301, 87);
         contentPane.add(logo);
 
-        cbxModPack = new JComboBox<PackInfo>();
+        cbxModPack = new JComboBox<>();
         cbxModPack.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -91,7 +88,7 @@ public class StartupFrame extends JFrame {
         cbxModPack.setRenderer(new ComboBoxRenderer());
         contentPane.add(cbxModPack);
 
-        for (PackInfo profile : PacksFile.getInstance().getPacks()) {
+        for (ModPack profile : repoHandler.getPacks()) {
             cbxModPack.addItem(profile);
         }
 
@@ -101,7 +98,7 @@ public class StartupFrame extends JFrame {
     }
 
     protected void updateDescription() {
-        String desc = ((PackInfo) cbxModPack.getSelectedItem()).getDescription();
+        String desc = ((ModPack) cbxModPack.getSelectedItem()).getDescription();
 
         for (JLabel label : description) {
             contentPane.remove(label);
@@ -120,16 +117,16 @@ public class StartupFrame extends JFrame {
         this.update(this.getGraphics());
     }
 
-    private void startInstallation() {
+    public void startInstallation() {
         try {
-            PackInfo modpack = (PackInfo) cbxModPack.getSelectedItem();
+            ModPack modpack = (ModPack) cbxModPack.getSelectedItem();
 
             if (modpack == null) {
                 Bootstrap.getLog().user("No modpack selected, check your internet connection");
                 return;
             }
 
-            ModPackInstaller installer = new ModPackInstaller(modpack.getDataUrl());
+            ModPackInstaller installer = new ModPackInstaller(this.repoHandler.getFullInfo(modpack));
             installer.getBus().register(new ProgressMonitor());
 
             if (!installer.perform()) {
@@ -152,4 +149,5 @@ public class StartupFrame extends JFrame {
             log.fatal("Stacktrace: ", e);
         }
     }
+
 }

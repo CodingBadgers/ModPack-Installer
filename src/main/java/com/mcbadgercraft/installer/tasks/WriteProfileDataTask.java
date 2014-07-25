@@ -34,7 +34,6 @@ public class WriteProfileDataTask extends Task {
         InstallData installdata = modpack.getConfig().getInstall();
 
         try {
-            AuthProfile auth = (AuthProfile) Bootstrap.getStartup().getCbxProfile().getSelectedItem();
             GameProfile game = new GameProfile(installdata.getProfileName());
             {
                 game.setLastVersionId(installdata.getTarget());
@@ -42,10 +41,6 @@ public class WriteProfileDataTask extends Task {
                 game.addReleaseType(ReleaseType.RELEASE);
                 game.setGameDir(gamedir);
                 game.setJavaArgs(new JavaArgs().setMaxMemory("1G").addSysProperty("fml.ignoreInvalidMinecraftCertificates", "true").addSysProperty("fml.ignorePatchDiscrepancies", "true"));
-            }
-
-            if (auth != null) {
-                game.setPlayerUUID(auth.getUuid());
             }
 
             ModPackInstaller.getProfilesFile().addProfile(game);

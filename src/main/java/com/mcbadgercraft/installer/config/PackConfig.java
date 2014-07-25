@@ -2,6 +2,7 @@ package com.mcbadgercraft.installer.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 import com.mcbadgercraft.installer.config.json.ArtifactIdAdapter;
 import com.mcbadgercraft.installer.config.json.FileAdapter;
 import com.mcbadgercraft.installer.config.json.UUIDAdapter;

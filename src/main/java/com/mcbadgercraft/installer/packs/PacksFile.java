@@ -1,9 +1,9 @@
 package com.mcbadgercraft.installer.packs;
 
-
 import com.google.common.collect.Lists;
 import com.mcbadgercraft.installer.Bootstrap;
 import com.mcbadgercraft.installer.config.PackConfig;
+import com.mcbadgercraft.installer.gui.Named;
 import com.mcbadgercraft.installer.utils.Utils;
 import lombok.Cleanup;
 import lombok.Getter;
@@ -53,7 +53,7 @@ public class PacksFile {
         }
     }
 
-    public static class PackInfo {
+    public static class PackInfo implements Named {
         @Getter
         private String name;
         @Getter

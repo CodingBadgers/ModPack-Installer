@@ -1,28 +1,29 @@
 package com.mcbadgercraft.installer;
 
+import com.mcbadgercraft.installer.crash.JavaFxVersionSection;
 import com.mcbadgercraft.installer.crash.VersionSection;
-import com.mcbadgercraft.installer.gui.StartupFrame;
+import com.mcbadgercraft.installer.gui.Screen;
+import com.mcbadgercraft.installer.gui.Screens;
 import com.mcbadgercraft.installer.log.LogPanel;
-import com.mcbadgercraft.installer.packs.PacksFile;
+import com.mcbadgercraft.installer.packs.PackRepositoryHandler;
+import com.mcbadgercraft.installer.packs.RemotePackRepository;
 import com.mcbadgercraft.installer.utils.MinecraftUtils;
 import com.mcbadgercraft.installer.utils.Utils;
+import com.sun.javafx.runtime.VersionInfo;
+
 import io.github.thefishlive.bootstrap.Bootstrapper;
 import io.github.thefishlive.bootstrap.Launcher;
-import io.github.thefishlive.crash.CrashReport;
 import io.github.thefishlive.installer.crash.CrashReporter;
-import io.github.thefishlive.installer.exception.InstallerException;
 import io.github.thefishlive.installer.log.InstallerLogger;
 import io.github.thefishlive.installer.options.InstallerOptions;
-import io.github.thefishlive.upload.UploadTarget;
-import io.github.thefishlive.upload.UploadTargets;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import lombok.Getter;
 
 import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
+
+import java.io.File;
 import java.net.URI;
 import java.util.Arrays;
 
@@ -33,13 +34,18 @@ public class Bootstrap implements Launcher {
     @Getter
     private static final LogPanel logPanel = new LogPanel();
     @Getter
-    private static StartupFrame startup = null;
+    private static Screen startup = null;
+    @Getter
+    private static Bootstrap instance;
 
     private static OptionParser parser = null;
     private static OptionSpec<Boolean> debugOption = null;
     private static OptionSpec<Boolean> threadedOption = null;
     private static OptionSpec<?> minecraftOption = null;
     private static OptionSpec<?> helpOption = null;
+    
+    @Getter
+    private PackRepositoryHandler packRepositoryHandler;
 
     static {
         parser = new OptionParser();
@@ -49,10 +55,15 @@ public class Bootstrap implements Launcher {
         helpOption = parser.acceptsAll(Arrays.asList("help", "?"), "Shows the program help").forHelp();
 
         CrashReporter.registerSection(new VersionSection());
+        CrashReporter.registerSection(new JavaFxVersionSection());
     }
 
     public static void main(String[] args) throws Exception {
         Bootstrapper.launch(Bootstrap.class, args);
+    }
+    
+    public Bootstrap() {
+    	instance = this;
     }
 
     @Override
@@ -64,7 +75,8 @@ public class Bootstrap implements Launcher {
             log.info("Starting AdminPack Installer v{}", VersionConstants.IMPLEMENTATION_VERSION);
             log.info("Implementing installer version {}", VersionConstants.SPECIFICATION_VERSION);
             log.info("OS: {} ({}) [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
-            log.info("Java Version: {} ({})", System.getProperty("java.version"), System.getProperty("java.class.version"));
+            log.info("Java Version: {} ({})", Utils.getJavaVersion().name().toLowerCase(), Utils.getJavaVersion().getClassVersion());
+            log.info("Java FX Version: {}", VersionInfo.getVersion());
 
             OptionSet options = parser.parse(args);
 
@@ -99,17 +111,17 @@ public class Bootstrap implements Launcher {
             }
             log.info("Threaded Downloads: {}", InstallerOptions.isThreadedDownloads());
 
-            PacksFile.setup();
+            packRepositoryHandler = new PackRepositoryHandler(new File(ModPackInstaller.getLauncherDir(), "repositories.json"));
+            packRepositoryHandler.registerPackRepository(new RemotePackRepository(URI.create("http://codingbadgers.github.io/AdminPack-Data/").toURL()));
 
-            startup = new StartupFrame();
-            startup.setVisible(true);
+            createLauncherFrame();
             log.info("Startup complete");
-        } catch (InstallerException ex) {
+        /*} catch (InstallerException ex) {
             log.error("A error has occurred causing the installer to crash");
             log.error("Exception: " + ex.getMessage());
             log.error("Stacktrace: ", ex);
 
-            CrashReporter.uploadCrashReport("A error has occurred causing the installer to crash", ex);
+            CrashReporter.uploadCrashReport("A error has occurred causing the installer to crash", ex);*/
         } catch (Throwable throwable) {
             log.fatal("A unexpected error has occurred causing the installer to crash");
             log.fatal("Exception: " + throwable.getMessage());
@@ -119,4 +131,8 @@ public class Bootstrap implements Launcher {
         }
     }
 
+	private void createLauncherFrame() throws Exception {
+		startup = Screens.JAVA_SWING.createScreen();
+		startup.show();
+	}
 }
