@@ -9,7 +9,6 @@ import com.mcbadgercraft.installer.packs.PackRepositoryHandler;
 import com.mcbadgercraft.installer.packs.RemotePackRepository;
 import com.mcbadgercraft.installer.utils.MinecraftUtils;
 import com.mcbadgercraft.installer.utils.Utils;
-import com.sun.javafx.runtime.VersionInfo;
 
 import io.github.thefishlive.bootstrap.Bootstrapper;
 import io.github.thefishlive.bootstrap.Launcher;
@@ -55,7 +54,7 @@ public class Bootstrap implements Launcher {
         helpOption = parser.acceptsAll(Arrays.asList("help", "?"), "Shows the program help").forHelp();
 
         CrashReporter.registerSection(new VersionSection());
-        CrashReporter.registerSection(new JavaFxVersionSection());
+        //CrashReporter.registerSection(new JavaFxVersionSection());
     }
 
     public static void main(String[] args) throws Exception {
@@ -76,7 +75,7 @@ public class Bootstrap implements Launcher {
             log.info("Implementing installer version {}", VersionConstants.SPECIFICATION_VERSION);
             log.info("OS: {} ({}) [{}]", System.getProperty("os.name"), System.getProperty("os.version"), System.getProperty("os.arch"));
             log.info("Java Version: {} ({})", Utils.getJavaVersion().name().toLowerCase(), Utils.getJavaVersion().getClassVersion());
-            log.info("Java FX Version: {}", VersionInfo.getVersion());
+            //log.info("Java FX Version: {}", System.getProperty("javafx.runtime.version"));
 
             OptionSet options = parser.parse(args);
 

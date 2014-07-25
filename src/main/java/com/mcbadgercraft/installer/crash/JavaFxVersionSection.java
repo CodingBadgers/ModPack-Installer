@@ -13,13 +13,10 @@ public class JavaFxVersionSection implements CrashReportSection {
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append(format.list()).append(format.bold()).append("Version:").append(format.bold()).append(" ");
-		builder.append(VersionInfo.getVersion()).append(format.newLine());
+		builder.append(System.getProperty("javafx.version")).append(format.newLine());
 		
 		builder.append(format.list()).append(format.bold()).append("Runtime Version:").append(format.bold()).append(" ");
-		builder.append(VersionInfo.getRuntimeVersion()).append(format.newLine());
-		
-		builder.append(format.list()).append(format.bold()).append("Build Timestamp:").append(format.bold()).append(" ");
-		builder.append(VersionInfo.getBuildTimestamp()).append(format.newLine());
+		builder.append(System.getProperty("javafx.runtime.version")).append(format.newLine());
 		
 		return builder.toString();
 	}
